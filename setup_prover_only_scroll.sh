@@ -2,7 +2,7 @@
 
 # 检查是否传入了参数
 if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 <claim_reward_address>
+  echo "Usage: $0 <claim_reward_address>"
   exit 1
 fi
 

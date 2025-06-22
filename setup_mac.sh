@@ -16,13 +16,9 @@ if [[ $(uname -m) == "x86_64" ]]; then
   # Intel chip
   # M series chip
   curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/verifier_mac_intel >~/cysic-verifier/verifier_mac
-  curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/libzkp_intel.dylib >~/cysic-verifier/libzkp.dylib
-  curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/librsp_intel.dylib >~/cysic-verifier/librsp.dylib
 else
   # M series chip
   curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/verifier_mac >~/cysic-verifier/verifier_mac
-  curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/libzkp.dylib >~/cysic-verifier/libzkp.dylib
-  curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/librsp.dylib >~/cysic-verifier/librsp.dylib
 fi
 
 # 第二段命令：创建配置文件
@@ -44,6 +40,7 @@ claim_reward_address: "$CLAIM_REWARD_ADDRESS"
 server:
   # don't modify this
   cysic_endpoint: "https://ws-pre.prover.xyz"
+  verify_endpoint: "http://verifier-rpc.prover.xyz:50052"
 EOF
 
 # 第三段命令：设置执行权限并启动verifier

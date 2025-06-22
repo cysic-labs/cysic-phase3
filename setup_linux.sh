@@ -13,8 +13,6 @@ rm -rf ~/cysic-verifier
 cd ~
 mkdir cysic-verifier
 curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/verifier_linux >~/cysic-verifier/verifier
-curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/libdarwin_verifier.so >~/cysic-verifier/libdarwin_verifier.so
-curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/librsp.so >~/cysic-verifier/librsp.so
 
 # 第二段命令：创建配置文件
 cat <<EOF >~/cysic-verifier/config.yaml
@@ -34,6 +32,7 @@ claim_reward_address: "$CLAIM_REWARD_ADDRESS"
 server:
   # don't modify this
   cysic_endpoint: "https://ws-pre.prover.xyz"
+  verify_endpoint: "http://verifier-rpc.prover.xyz:50052"
 EOF
 
 # 第三段命令：设置执行权限并启动verifier

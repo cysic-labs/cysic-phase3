@@ -18,6 +18,7 @@ curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/libd
 curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/libcysnet_monitor.so >~/cysic-prover/libcysnet_monitor.so
 curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/librsp.so >~/cysic-prover/librsp.so
 curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/eth_dependency.sh >~/cysic-prover/eth_dependency.sh
+curl -L https://github.com/cysic-labs/cysic-phase3/releases/download/v1.0.0/host_cuda_prover >~/cysic-prover/host_cuda_prover
 
 # 第二段命令：创建配置文件
 cat <<EOF >~/cysic-prover/config.yaml
@@ -52,6 +53,7 @@ EOF
 # 第三段命令：设置执行权限并启动verifier
 cd ~/cysic-prover/
 chmod +x ~/cysic-prover/prover
+chmod +x ~/cysic-prover/host_cuda_prover
 echo "SP1_PROVER=cuda LD_LIBRARY_PATH=. CHAIN_ID=534352 ./prover" >~/cysic-prover/start.sh
 chmod +x ~/cysic-prover/start.sh
 
