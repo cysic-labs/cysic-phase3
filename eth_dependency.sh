@@ -1,5 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 # 尝试运行 cargo prove --version 命令
-if ! cargo prove --version &> /dev/null; then
+if ! command -v cargo &> /dev/null || ! cargo prove --version &> /dev/null; then
     # step1: install sp1 prover system
     curl -L https://sp1up.succinct.xyz | bash
 
@@ -24,9 +27,10 @@ if ! cargo prove --version &> /dev/null; then
     *)
         echo "sp1up: could not detect shell, manually add ${SP1_BIN_DIR} to your PATH."
         exit 1
+        ;;
     esac
 
-    source ${PROFILE}
+    [ -f "${PROFILE}" ] && source "${PROFILE}"
     sp1up
 else
   echo "sp1 prover system installed, skip the installation steps"
@@ -35,7 +39,8 @@ fi
 # 尝试运行 nvidia-smi 命令
 if ! command -v nvidia-smi &> /dev/null || ! nvidia-smi &> /dev/null; then
     # 获取 Ubuntu 系统版本代号
-    UBUNTU_CODENAME=$(lsb_release -cs)
+    . /etc/os-release
+    UBUNTU_CODENAME=${UBUNTU_CODENAME:-$VERSION_CODENAME}
     # 根据系统版本选择安装 CUDA
     case $UBUNTU_CODENAME in
         focal)
@@ -76,9 +81,11 @@ if ! command -v docker &> /dev/null; then
     sudo chmod a+r /etc/apt/keyrings/docker.asc
 
     # Add the repository to Apt sources:
+    . /etc/os-release
+    UBUNTU_CODENAME=${UBUNTU_CODENAME:-$VERSION_CODENAME}
     echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-      $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+      ${UBUNTU_CODENAME} stable" | \
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update
     # install the docker engine
@@ -104,7 +111,7 @@ fi
 
 # pull the docker image which calculate the eth proof
 # 检查镜像是否已经下载
-if ! docker images | grep -q "public.ecr.aws/succinct-labs/moongate" | grep -q "v4.1.0"; then
+if ! docker images | grep -qE "public\.ecr\.aws/succinct-labs/moongate\s+v4\.1\.0"; then
     docker pull public.ecr.aws/succinct-labs/moongate:v4.1.0
 else
     echo "docker image public.ecr.aws/succinct-labs/moongate:v4.1.0 is downloaded, skip the download step"
